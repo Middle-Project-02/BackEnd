@@ -3,28 +3,24 @@ FROM gradle:8.13-jdk17 AS build
 
 WORKDIR /app
 
-# Gradle 캐시 최적화를 위해 설정 파일 먼저 복사
-COPY build.gradle settings.gradle ./
-COPY gradle gradle
-COPY gradlew ./
+# 빌드 캐시 활용을 위해 먼저 Gradle 설정 파일 복사
+COPY settings.gradle ./
+COPY build.gradle ./
+COPY gradle ./gradle
 
-# 의존성 미리 다운로드 (실패 시 빌드 중단)
-RUN ./gradlew dependencies
+# 나머지 프로젝트 파일 복사
+COPY src ./src
 
-# 전체 프로젝트 복사
-COPY . .
+# Gradle 빌드 실행 (테스트 생략)
+RUN gradle build -x test
 
-# 빌드 (테스트 제외)
-RUN ./gradlew bootJar -x test
-
-# 2단계: 실행용 이미지
+# 2. 실제 실행용 이미지 (2단계 실행)
 FROM eclipse-temurin:17-jdk-alpine
 
 WORKDIR /app
 
-COPY --from=build /app/build/libs/together-0.0.1-SNAPSHOT.jar app.jar
+# 빌드 결과물 복사
+COPY --from=build /app/build/libs/*.jar app.jar
 
-
-EXPOSE 8080
-
+# 앱 실행
 CMD ["java", "-jar", "app.jar"]
