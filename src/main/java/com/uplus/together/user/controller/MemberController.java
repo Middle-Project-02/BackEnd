@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.logging.log4j.util.Strings.isBlank;
+
 @Controller
 @RequestMapping("/together/users")
 @RequiredArgsConstructor
@@ -39,6 +41,13 @@ public class MemberController {
         String member_nickname = memberSignupDTO.getMember_nickname();
         String member_email = memberSignupDTO.getMember_email();
 
+        // 필수값 빈 문자열 또는 null 검사
+        if (isBlank(member_email) || isBlank(member_password) || isBlank(member_name) || isBlank(member_nickname)) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "error");
+            response.put("message", "이메일, 비밀번호, 이름, 닉네임은 모두 필수 입력값입니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
 
         // 이메일 중복 검사
         if (memberService.isEmailDuplicated(member_email)) {
