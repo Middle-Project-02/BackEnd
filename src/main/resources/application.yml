@@ -1,0 +1,24 @@
+# application.yml
+spring:
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: ${HIKARI_URL}
+      username: ${HIKARI_USERNAME}
+      password: ${HIKARI_PASSWORD}
+      pool-name: hikari-pool
+      maximum-pool-size: 1
+      minimum-idle: 1
+      connection-timeout: 5000
+      connection-init-sql: SELECT 1
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      auto-commit: true
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.uplus.together.*.dto

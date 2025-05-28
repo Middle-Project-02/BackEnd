@@ -62,6 +62,10 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+bootJar {
+	mainClass.set('com.uplus.together.TogetherApplication')
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
