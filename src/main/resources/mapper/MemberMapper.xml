@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uplus.together.user.repository.member.MemberMapper">
+
+
+    <insert id="insert" parameterType="com.uplus.together.user.dto.member.MemberSignupDTO" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO USERS (
+            member_email, member_password, member_nickname, member_name)
+        VALUES (#{member_email}, #{member_password}, #{member_nickname}, #{member_name})
+    </insert>
+
+
+
+    <select id="isIdDuplicated" parameterType="java.lang.String" resultType="java.lang.Boolean">
+        SELECT COUNT(*) > 0
+        FROM USERS
+        WHERE member_nickname = #{member_nickname}
+    </select>
+
+
+    <select id="isEmailDuplicated" parameterType="java.lang.String" resultType="java.lang.Boolean">
+        SELECT COUNT(*) > 0
+        FROM USERS
+        WHERE member_email = #{member_email}
+    </select>
+
+</mapper>
