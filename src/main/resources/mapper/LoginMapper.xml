@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- UserMapper.xml -->
+<mapper namespace="com.uplus.together.user.repository.login.LoginMapper">
+    <select id="findByUsername" resultType="com.uplus.together.user.dto.login.LoginDTO">
+        SELECT member_email, member_password, delflag FROM USERS WHERE member_email  = #{member_email}
+    </select>
+
+    <select id="findByUsername2" resultType="com.uplus.together.user.dto.member.MemberDTO">
+        SELECT * FROM USERS WHERE member_email = #{member_email}
+    </select>
+
+    <update id="updateVerificationCode">
+        UPDATE USERS
+        SET refresh_token = #{token}
+        WHERE member_email = #{member_email}
+    </update>
+
+    <update id="clearVerificationCode">
+        UPDATE USERS
+        SET refresh_token = NULL
+        WHERE member_email = #{member_email}
+    </update>
+
+    <update id="saveRefreshToken" parameterType="map">
+        update USERS
+        set refresh_token = #{token}
+        where member_email = #{member_email}
+    </update>
+
+    <select id="getRefreshToken" parameterType="string" resultType="string">
+        select refresh_token
+        from USERS
+        where member_email = #{member_email}
+    </select>
+
+    <update id="deleteRefreshToken" parameterType="string">
+        update USERS
+        set refresh_token = NULL
+        where member_email = #{member_email}
+    </update>
+</mapper>
